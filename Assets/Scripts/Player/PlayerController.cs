@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     //public GameObject groundCheckTransform;
@@ -13,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     private Collider2D _collider;
     private SpriteRenderer _sr;
+    private Animator _anim;
+    
+    
     private bool _isGrounded = false;
     private Vector2 groundCheckPos => CalculateGroundCheck();
     private Vector2 CalculateGroundCheck()
@@ -27,8 +31,9 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
         _sr = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
 
-        ////initalize the ground check object here rather than in the inpsector for safety
+        ////initalize the ground check object here rather than in the inpsector for safety - only if we use a gameobject to get our foot position
         //if (groundCheckTransform == null)
         //{
         //    groundCheckTransform = new GameObject("GroundCheck");
@@ -46,32 +51,28 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         bool jumpInput = Input.GetButtonDown("Jump");
 
-
-        SpriteFlip(horizontalInput);
-        
         //movement
         Vector2 velocity = _rb.linearVelocity;
         velocity.x = horizontalInput * moveSpeed;
         _rb.linearVelocity = velocity;
 
-
+        if (horizontalInput != 0) SpriteFlip(horizontalInput);
+        
         //jumping
         if (jumpInput && _isGrounded)
         {
             _rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
-        
+
+        //animation
+        _anim.SetFloat("moveInput", Mathf.Abs(horizontalInput));
+        _anim.SetFloat("yVel", _rb.linearVelocity.y);
+        _anim.SetBool("isGrounded", _isGrounded);
     }
 
-    private void SpriteFlip(float horizontalInput)
-    {
-        if (horizontalInput != 0)
-            _sr.flipX = (horizontalInput < 0);
-
-        //if (_sr.flipX && horizontalInput > 0 || !_sr.flipX && horizontalInput < 0)
-        //{
-        //    _sr.flipX = !_sr.flipX;
-        //}
-    }
-
+    /// <summary>
+    /// Sprite flipping based on horizontal input - this function should only be called when horizontal input is non-zero
+    /// </summary>
+    /// <param name="horizontalInput">The input received from Unity's input system</param>
+    private void SpriteFlip(float horizontalInput) => _sr.flipX = (horizontalInput < 0);
 }
