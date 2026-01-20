@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
     //public GameObject groundCheckTransform;
@@ -12,10 +12,9 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Collider2D _collider;
+    private SpriteRenderer _sr;
     private bool _isGrounded = false;
     private Vector2 groundCheckPos => CalculateGroundCheck();
-
-
     private Vector2 CalculateGroundCheck()
     {
         Bounds bounds = _collider.bounds;
@@ -27,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _collider = GetComponent<Collider2D>();
+        _sr = GetComponent<SpriteRenderer>();
 
         ////initalize the ground check object here rather than in the inpsector for safety
         //if (groundCheckTransform == null)
@@ -46,10 +46,14 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         bool jumpInput = Input.GetButtonDown("Jump");
 
+
+        SpriteFlip(horizontalInput);
+        
         //movement
         Vector2 velocity = _rb.linearVelocity;
         velocity.x = horizontalInput * moveSpeed;
         _rb.linearVelocity = velocity;
+
 
         //jumping
         if (jumpInput && _isGrounded)
@@ -59,5 +63,15 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void SpriteFlip(float horizontalInput)
+    {
+        if (horizontalInput != 0)
+            _sr.flipX = (horizontalInput < 0);
+
+        //if (_sr.flipX && horizontalInput > 0 || !_sr.flipX && horizontalInput < 0)
+        //{
+        //    _sr.flipX = !_sr.flipX;
+        //}
+    }
 
 }
