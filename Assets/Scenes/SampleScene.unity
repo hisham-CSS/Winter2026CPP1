@@ -350,7 +350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1254370535}
   - component: {fileID: 1254370536}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -553,7 +553,7 @@ GameObject:
   - component: {fileID: 1759141096}
   - component: {fileID: 1759141098}
   - component: {fileID: 1759141097}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -725,7 +725,7 @@ Transform:
   m_GameObject: {fileID: 2032015497}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.38, y: -3.93, z: 0}
+  m_LocalPosition: {x: -3.21, y: -1.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -789,8 +789,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1635dd216421b5b4182b640c03bb6b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   moveSpeed: 5
   jumpForce: 10
+  groundCheckRadius: 0.02
 --- !u!50 &2032015503
 Rigidbody2D:
   serializedVersion: 5
