@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     
     
     private bool _isGrounded = false;
+    private bool _JumpAttack = false;
     private Vector2 groundCheckPos => CalculateGroundCheck();
     private Vector2 CalculateGroundCheck()
     {
@@ -49,7 +50,9 @@ public class PlayerController : MonoBehaviour
 
         //input handling
         float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
         bool jumpInput = Input.GetButtonDown("Jump");
+        bool attack = Input.GetButtonDown("Fire1");
 
         //movement
         Vector2 velocity = _rb.linearVelocity;
@@ -64,10 +67,20 @@ public class PlayerController : MonoBehaviour
             _rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
 
+        if (!_isGrounded && attack)
+        {
+            _JumpAttack = true;
+
+            Debug.Log("Jump Attack!");
+        }
+
+        if (_isGrounded) _JumpAttack = false;
+
         //animation
         _anim.SetFloat("moveInput", Mathf.Abs(horizontalInput));
         _anim.SetFloat("yVel", _rb.linearVelocity.y);
         _anim.SetBool("isGrounded", _isGrounded);
+        _anim.SetBool("JumpAttack", _JumpAttack);
     }
 
     /// <summary>
