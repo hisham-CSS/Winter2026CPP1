@@ -4,27 +4,22 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-    //public GameObject groundCheckTransform;
+    [Header("Ground Check Settings")]
     public LayerMask groundLayer;
+    public float groundCheckRadius = 0.02f;
 
+    [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
-    public float groundCheckRadius = 0.02f;
+
 
     private Rigidbody2D _rb;
     private Collider2D _collider;
     private SpriteRenderer _sr;
     private Animator _anim;
-    
+    private GroundCheck _groundCheck;
     
     private bool _isGrounded = false;
-    private bool _JumpAttack = false;
-    private Vector2 groundCheckPos => CalculateGroundCheck();
-    private Vector2 CalculateGroundCheck()
-    {
-        Bounds bounds = _collider.bounds;
-        return new Vector2(bounds.center.x, bounds.min.y);
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,25 +29,18 @@ public class PlayerController : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
 
-        ////initalize the ground check object here rather than in the inpsector for safety - only if we use a gameobject to get our foot position
-        //if (groundCheckTransform == null)
-        //{
-        //    groundCheckTransform = new GameObject("GroundCheck");
-        //    groundCheckTransform.transform.SetParent(transform);
-        //    groundCheckTransform.transform.localPosition = Vector3.zero;
-        //}
+        _groundCheck = new GroundCheck(_collider, _rb, groundCheckRadius, groundLayer);
     }
 
     // Update is called once per frame
     void Update()
     {
-        _isGrounded = Physics2D.OverlapCircle(groundCheckPos, groundCheckRadius, groundLayer);
+        _isGrounded = _groundCheck.IsGrounded();
 
         //input handling
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
         bool jumpInput = Input.GetButtonDown("Jump");
-        bool attack = Input.GetButtonDown("Fire1");
 
         //movement
         Vector2 velocity = _rb.linearVelocity;
@@ -67,20 +55,10 @@ public class PlayerController : MonoBehaviour
             _rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
 
-        if (!_isGrounded && attack)
-        {
-            _JumpAttack = true;
-
-            Debug.Log("Jump Attack!");
-        }
-
-        if (_isGrounded) _JumpAttack = false;
-
         //animation
         _anim.SetFloat("moveInput", Mathf.Abs(horizontalInput));
         _anim.SetFloat("yVel", _rb.linearVelocity.y);
         _anim.SetBool("isGrounded", _isGrounded);
-        _anim.SetBool("JumpAttack", _JumpAttack);
     }
 
     /// <summary>
