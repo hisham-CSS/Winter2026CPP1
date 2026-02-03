@@ -109,6 +109,7 @@ public class PlayerController : MonoBehaviour
     
     private bool _isGrounded = false;
     private bool _isFiring = false;
+    private bool _airAttack = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -156,11 +157,23 @@ public class PlayerController : MonoBehaviour
             _isFiring = true;
         }
 
+        if (!_isGrounded && fireInput && verticalInput == 1)
+        {
+            _airAttack = true;
+            _isFiring = false;
+        }
+
+        if (_isGrounded)
+        {
+            _airAttack = false;
+        }
+
         //animation
         _anim.SetFloat("moveInput", Mathf.Abs(horizontalInput));
         _anim.SetFloat("yVel", _rb.linearVelocity.y);
         _anim.SetBool("isGrounded", _isGrounded);
         _anim.SetBool("Fire", _isFiring);
+        _anim.SetBool("AirAttack", _airAttack);
     }
 
     /// <summary>
@@ -175,5 +188,10 @@ public class PlayerController : MonoBehaviour
     public void ResetFireAnimation()
     {
         _isFiring = false;
+    }
+
+    public void IncreaseGravity()
+    {
+        _rb.gravityScale = 5f;
     }
 }
