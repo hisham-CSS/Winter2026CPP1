@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(SpriteRenderer))]
@@ -11,6 +12,93 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
+
+    [Header("Powerup Settings")]
+    public float initialPowerupDuration = 5f;
+    public float powerupJumpForce = 20f;
+
+    private float currentPowerupDuration = 0f;
+    private float initalJumpForce = 7f;
+    private Coroutine jumpforceCoroutine = null;
+
+    public void JumpForceChange()
+    {
+        if (jumpforceCoroutine != null)
+        {
+            StopCoroutine(jumpforceCoroutine);
+            jumpforceCoroutine = null;
+            jumpForce = initalJumpForce;
+        }
+
+        jumpforceCoroutine = StartCoroutine(JumpForceChangeCoroutine());
+    }
+
+    IEnumerator JumpForceChangeCoroutine()
+    {
+        currentPowerupDuration = initialPowerupDuration + currentPowerupDuration;
+        jumpForce = powerupJumpForce;
+
+        while (currentPowerupDuration > 0)
+        {
+            currentPowerupDuration -= Time.deltaTime;
+            Debug.Log("Jump Powerup Time Remaining: " + currentPowerupDuration);
+            yield return null;
+        }
+
+        jumpForce = initalJumpForce;
+        jumpforceCoroutine = null;
+        currentPowerupDuration = 0;
+    }
+
+
+    private int _lives = 3;
+    private int maxLives = 5;
+
+    //C# way of doing getters and setters - property accesors
+    public int lives
+    {
+        get => _lives;
+        set
+        {
+            if (value < 0)
+            {
+                //GameOver Logic goes here
+                Debug.Log("Game Over!");
+                return;
+            }
+
+            if (value > maxLives)
+            {
+                _lives = maxLives;
+            }
+            else
+            {
+                _lives = value;
+            }
+
+            Debug.Log("Life pickup collected! Lives: " + _lives);
+        }
+    }
+
+    //C++ way of doing getters and setters
+    //public int GetLives()
+    //{
+    //    return lives;
+    //}
+    //public void SetLives(int valueToAdd)
+    //{
+    //    lives += valueToAdd;
+    //    if (lives > maxLives)
+    //    {
+    //        lives = maxLives;
+    //    }
+
+    //    if (lives < 0)
+    //    {
+    //        //GameOver logic goes here
+    //    }
+    //    Debug.Log("Life pickup collected! Lives: " + lives);
+    //}
 
 
     private Rigidbody2D _rb;
@@ -31,6 +119,8 @@ public class PlayerController : MonoBehaviour
         _anim = GetComponent<Animator>();
 
         _groundCheck = new GroundCheck(_collider, _rb, groundCheckRadius, groundLayer);
+
+        initalJumpForce = jumpForce;
     }
 
     // Update is called once per frame

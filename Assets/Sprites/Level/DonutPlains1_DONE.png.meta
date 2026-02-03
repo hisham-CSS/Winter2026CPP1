@@ -174,7 +174,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DonutPlains1_DONE_1
+      name: BigCoin
       rect:
         serializedVersion: 2
         x: 19
@@ -196,7 +196,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DonutPlains1_DONE_2
+      name: Coin
       rect:
         serializedVersion: 2
         x: 64
@@ -416,7 +416,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DonutPlains1_DONE_12
+      name: 1up
       rect:
         serializedVersion: 2
         x: 241
@@ -473,13 +473,13 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+      1up: -6400644745172546573
+      BigCoin: -7698091877536220419
+      Coin: -6223913005026926526
       DonutPlains1_DONE_0: -4424372450760166762
-      DonutPlains1_DONE_1: -7698091877536220419
       DonutPlains1_DONE_10: -4155499301291857916
       DonutPlains1_DONE_11: -6150482773385901676
-      DonutPlains1_DONE_12: -6400644745172546573
       DonutPlains1_DONE_13: -1617794307008389237
-      DonutPlains1_DONE_2: -6223913005026926526
       DonutPlains1_DONE_3: -8251548219702976207
       DonutPlains1_DONE_4: -3135234623664698759
       DonutPlains1_DONE_5: -5401252091279294996
