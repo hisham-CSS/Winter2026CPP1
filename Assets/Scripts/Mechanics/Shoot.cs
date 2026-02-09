@@ -8,6 +8,8 @@ public class Shoot : MonoBehaviour
     [SerializeField] private Transform spawnPointRight;
     [SerializeField] private Projectile projectilePrefab;
 
+    private Vector2 leftShotVelocity;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +25,8 @@ public class Shoot : MonoBehaviour
         {
             Debug.LogError("Spawn points or projectile for shooting are not assigned on: " + gameObject.name);
         }
+
+        leftShotVelocity = new Vector2(-initalShotVelocity.x, initalShotVelocity.y);
     }
 
     public void Fire()
@@ -36,7 +40,7 @@ public class Shoot : MonoBehaviour
         else
         {
             currentProjectile = Instantiate(projectilePrefab, spawnPointLeft.position, Quaternion.identity);
-            currentProjectile.SetVelocity(initalShotVelocity);
+            currentProjectile.SetVelocity(leftShotVelocity);
         }
     }
 }

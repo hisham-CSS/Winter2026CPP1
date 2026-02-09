@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Debug Mode")]
+    public bool debugMode = false;
+
     [Header("Ground Check Settings")]
     public LayerMask groundLayer;
     public float groundCheckRadius = 0.02f;
@@ -41,7 +44,8 @@ public class PlayerController : MonoBehaviour
         while (currentPowerupDuration > 0)
         {
             currentPowerupDuration -= Time.deltaTime;
-            Debug.Log("Jump Powerup Time Remaining: " + currentPowerupDuration);
+            if (currentPowerupDuration < 0) currentPowerupDuration = 0;
+            if (debugMode) Debug.Log("Jump Powerup Time Remaining: " + currentPowerupDuration);
             yield return null;
         }
 
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
         currentPowerupDuration = 0;
     }
 
+    public float PowerupDuration() => currentPowerupDuration;
 
     private int _lives = 3;
     private int maxLives = 5;
@@ -76,7 +81,7 @@ public class PlayerController : MonoBehaviour
                 _lives = value;
             }
 
-            Debug.Log("Life pickup collected! Lives: " + _lives);
+            if (debugMode) Debug.Log("Life pickup collected! Lives: " + _lives);
         }
     }
 
@@ -174,6 +179,8 @@ public class PlayerController : MonoBehaviour
         _anim.SetBool("isGrounded", _isGrounded);
         _anim.SetBool("Fire", _isFiring);
         _anim.SetBool("AirAttack", _airAttack);
+
+        if (debugMode) Debug.Log($"Velocity is: {_rb.linearVelocity}");
     }
 
     /// <summary>
