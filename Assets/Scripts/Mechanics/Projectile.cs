@@ -3,7 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
+    [SerializeField] private ProjectileType type = ProjectileType.PlayerProjectile;
     [SerializeField, Range(0.5f, 10f)] private float lifetime = 10f;
+    [SerializeField] private int damage = 10;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -14,4 +16,24 @@ public class Projectile : MonoBehaviour
     {
         GetComponent<Rigidbody2D>().linearVelocity = Velocity;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (type == ProjectileType.PlayerProjectile)
+        {
+            BaseEnemy enemy = collision.gameObject.GetComponent<BaseEnemy>();
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+                Destroy(gameObject);
+            }
+        }
+    }
+}
+
+public enum ProjectileType
+{
+    PlayerProjectile,
+    EnemyProjectile
 }

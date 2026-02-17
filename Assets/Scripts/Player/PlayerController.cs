@@ -201,4 +201,14 @@ public class PlayerController : MonoBehaviour
     {
         _rb.gravityScale = 5f;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Squish") && _rb.linearVelocityY < 0)
+        {
+            collision.GetComponentInParent<BaseEnemy>().TakeDamage(0, DamageType.JumpedOn);
+            _rb.linearVelocityY = 0;
+            _rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+    }
 }
