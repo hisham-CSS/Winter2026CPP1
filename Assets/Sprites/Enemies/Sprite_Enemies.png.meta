@@ -8551,7 +8551,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Sprite_Enemies_290
+      name: EnemyProjectile
       rect:
         serializedVersion: 2
         x: 801
@@ -17300,6 +17300,7 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
+      EnemyProjectile: -675099761668843415
       KamekFire1: 6927981411972597962
       KamekFire2: 4627375648895073383
       KamekFire3: 695433566626481274
@@ -17523,7 +17524,6 @@ TextureImporter:
       Sprite_Enemies_288: -7199059520936841643
       Sprite_Enemies_289: 936871272392101253
       Sprite_Enemies_29: 5637884585264908924
-      Sprite_Enemies_290: -675099761668843415
       Sprite_Enemies_291: 2634411856299483029
       Sprite_Enemies_292: 5163059118326160480
       Sprite_Enemies_293: -147000117367987440

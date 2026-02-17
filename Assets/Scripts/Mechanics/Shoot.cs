@@ -3,7 +3,7 @@ using UnityEngine;
 public class Shoot : MonoBehaviour
 {
     private SpriteRenderer _sr;
-    [SerializeField] private Vector2 initalShotVelocity = new Vector2(3, 3);
+    [SerializeField, Tooltip("Assuming firing to the right - x velocity is automtically negated by the script")] private Vector2 initalShotVelocity = new Vector2(3, 3);
     [SerializeField] private Transform spawnPointLeft;
     [SerializeField] private Transform spawnPointRight;
     [SerializeField] private Projectile projectilePrefab;
