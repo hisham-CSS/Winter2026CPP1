@@ -56,34 +56,34 @@ public class PlayerController : MonoBehaviour
 
     public float PowerupDuration() => currentPowerupDuration;
 
-    private int _lives = 3;
-    private int maxLives = 5;
+    //private int _lives = 3;
+    //private int maxLives = 5;
 
-    //C# way of doing getters and setters - property accesors
-    public int lives
-    {
-        get => _lives;
-        set
-        {
-            if (value < 0)
-            {
-                //GameOver Logic goes here
-                Debug.Log("Game Over!");
-                return;
-            }
+    ////C# way of doing getters and setters - property accesors
+    //public int lives
+    //{
+    //    get => _lives;
+    //    set
+    //    {
+    //        if (value < 0)
+    //        {
+    //            //GameOver Logic goes here
+    //            Debug.Log("Game Over!");
+    //            return;
+    //        }
 
-            if (value > maxLives)
-            {
-                _lives = maxLives;
-            }
-            else
-            {
-                _lives = value;
-            }
+    //        if (value > maxLives)
+    //        {
+    //            _lives = maxLives;
+    //        }
+    //        else
+    //        {
+    //            _lives = value;
+    //        }
 
-            if (debugMode) Debug.Log("Life pickup collected! Lives: " + _lives);
-        }
-    }
+    //        if (debugMode) Debug.Log("Life pickup collected! Lives: " + _lives);
+    //    }
+    //}
 
     //C++ way of doing getters and setters
     //public int GetLives()
