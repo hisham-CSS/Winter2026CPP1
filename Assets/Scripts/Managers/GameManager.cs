@@ -1,9 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private bool debugMode = false;
+
+    //event - a way to broadcast messages to any interested listeners - this is a way to implement the observer pattern in C#
+    public delegate void PlayerInstanceDelegate(PlayerController player);
+    public event PlayerInstanceDelegate OnPlayerSpawned;
+
 
     #region Singleton Pattern
     private static GameManager _instance;
@@ -34,21 +40,22 @@ public class GameManager : MonoBehaviour
         {
             if (value < 0)
             {
-                //GameOver Logic goes here
-                Debug.Log("Game Over!");
+                GameOver();                
                 return;
             }
 
+            if (_lives > value)
+            {
+                Respawn();
+            }
+
+            _lives = value;
             if (value > maxLives)
             {
                 _lives = maxLives;
             }
-            else
-            {
-                _lives = value;
-            }
 
-            if (debugMode) Debug.Log("Life pickup collected! Lives: " + _lives);
+            if (debugMode) Debug.Log("Life value changed to " + _lives);
         }
     }
     #endregion
@@ -85,7 +92,24 @@ public class GameManager : MonoBehaviour
     {
         _playerInstance = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
         UpdateCheckpoint(spawnPos);
+
+        //if (OnPlayerSpawned != null)
+        //{
+        //    OnPlayerSpawned.Invoke(_playerInstance);
+        //}
+
+        OnPlayerSpawned?.Invoke(_playerInstance);
     }
 
     public void UpdateCheckpoint(Vector3 newCheckpoint) => currentCheckpoint = newCheckpoint;
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over!");
+    }
+
+    private void Respawn()
+    {
+        _playerInstance.transform.position = currentCheckpoint;
+    }
 }

@@ -44,6 +44,14 @@ public abstract class BaseEnemy : MonoBehaviour
                 Destroy(gameObject, 0.5f);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            GameManager.Instance.Lives--;
+        }
+    }
 }
 
 public enum DamageType

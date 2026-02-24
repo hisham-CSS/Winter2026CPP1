@@ -14,20 +14,13 @@ public class CameraFollow : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //MAKE YOUR CODE DEFENSIVE AGAINST BAD INPUT
-        if (!target)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-            if (!player)
-            {
-                Debug.LogError("CameraFollow: No GameObject with tag Player exists!");
-                return;
-            }
-            target = player.transform;
-        }
+        GameManager.Instance.OnPlayerSpawned += OnPlayerSpawnedCallback;
     }
 
+    private void OnPlayerSpawnedCallback(PlayerController player)
+    {
+        target = player.transform;
+    }
 
     //General rule of thumb: Inputs are polled in update
     //Physics are applied in FixedUpdate
