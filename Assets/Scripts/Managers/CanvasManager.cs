@@ -41,13 +41,20 @@ public class CanvasManager : MonoBehaviour
 
         if (resumeGame != null)
             resumeGame.onClick.AddListener(() => SetMenus(null, pauseMenu));
+
+        if (livesText != null)
+        {
+            livesText.text = "Lives: " + GameManager.Instance.Lives;
+            GameManager.Instance.OnLifeValueChanged += (lives) => livesText.text = "Lives: " + lives;
+        }
+            
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (livesText != null)
-            livesText.text = "Lives: " + GameManager.Instance.Lives;
+        //if (livesText != null)
+        //    livesText.text = "Lives: " + GameManager.Instance.Lives;
 
         if (!pauseMenu) return;
 
