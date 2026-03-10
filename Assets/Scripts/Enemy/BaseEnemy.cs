@@ -1,7 +1,7 @@
 using UnityEngine;
 
 //abstract class can be derrived from but not instantiated at runtime
-[RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer), typeof(Animator), typeof(AudioSource))]
 public abstract class BaseEnemy : MonoBehaviour
 {
     //public: accessible from anywhere in the code
@@ -10,6 +10,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected SpriteRenderer sr;
     protected Animator anim;
+    protected AudioSource audioSource;
     protected int health;
 
     public int maxHealth = 5;
@@ -20,6 +21,7 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         if (maxHealth <= 0)
         {

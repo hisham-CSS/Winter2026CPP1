@@ -8,8 +8,10 @@ public class Life : Pickup
 
     public override void OnPickup(GameObject player) => GameManager.Instance.Lives += livesToAdd;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = new Vector2(-2f, 2f);
     }

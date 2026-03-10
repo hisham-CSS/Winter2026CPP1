@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(SpriteRenderer))]
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Animator), typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Debug Mode")]
@@ -20,90 +20,15 @@ public class PlayerController : MonoBehaviour
     public float initialPowerupDuration = 5f;
     public float powerupJumpForce = 20f;
 
+    [Header("Audio Settings")]
+    public AudioClip jumpSound;
+    public AudioClip stompSound;
+
     private float currentPowerupDuration = 0f;
     private float initalJumpForce = 7f;
     private Coroutine jumpforceCoroutine = null;
 
-    public void JumpForceChange()
-    {
-        if (jumpforceCoroutine != null)
-        {
-            StopCoroutine(jumpforceCoroutine);
-            jumpforceCoroutine = null;
-            jumpForce = initalJumpForce;
-        }
 
-        jumpforceCoroutine = StartCoroutine(JumpForceChangeCoroutine());
-    }
-
-    IEnumerator JumpForceChangeCoroutine()
-    {
-        currentPowerupDuration = initialPowerupDuration + currentPowerupDuration;
-        jumpForce = powerupJumpForce;
-
-        while (currentPowerupDuration > 0)
-        {
-            currentPowerupDuration -= Time.deltaTime;
-            if (currentPowerupDuration < 0) currentPowerupDuration = 0;
-            if (debugMode) Debug.Log("Jump Powerup Time Remaining: " + currentPowerupDuration);
-            yield return null;
-        }
-
-        jumpForce = initalJumpForce;
-        jumpforceCoroutine = null;
-        currentPowerupDuration = 0;
-    }
-
-    public float PowerupDuration() => currentPowerupDuration;
-
-    //private int _lives = 3;
-    //private int maxLives = 5;
-
-    ////C# way of doing getters and setters - property accesors
-    //public int lives
-    //{
-    //    get => _lives;
-    //    set
-    //    {
-    //        if (value < 0)
-    //        {
-    //            //GameOver Logic goes here
-    //            Debug.Log("Game Over!");
-    //            return;
-    //        }
-
-    //        if (value > maxLives)
-    //        {
-    //            _lives = maxLives;
-    //        }
-    //        else
-    //        {
-    //            _lives = value;
-    //        }
-
-    //        if (debugMode) Debug.Log("Life pickup collected! Lives: " + _lives);
-    //    }
-    //}
-
-    //C++ way of doing getters and setters
-    //public int GetLives()
-    //{
-    //    return lives;
-    //}
-    //public void SetLives(int valueToAdd)
-    //{
-    //    lives += valueToAdd;
-    //    if (lives > maxLives)
-    //    {
-    //        lives = maxLives;
-    //    }
-
-    //    if (lives < 0)
-    //    {
-    //        //GameOver logic goes here
-    //    }
-    //    Debug.Log("Life pickup collected! Lives: " + lives);
-    //}
 
 
     private Rigidbody2D _rb;
@@ -111,10 +36,12 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _sr;
     private Animator _anim;
     private GroundCheck _groundCheck;
-    
+    private AudioSource _audioSource;
+
     private bool _isGrounded = false;
     private bool _isFiring = false;
     private bool _airAttack = false;
+    public float PowerupDuration() => currentPowerupDuration;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -123,6 +50,7 @@ public class PlayerController : MonoBehaviour
         _collider = GetComponent<Collider2D>();
         _sr = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
 
         _groundCheck = new GroundCheck(_collider, _rb, groundCheckRadius, groundLayer);
 
@@ -154,6 +82,7 @@ public class PlayerController : MonoBehaviour
         if (jumpInput && _isGrounded)
         {
             _rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            _audioSource.PlayOneShot(jumpSound);
         }
         //shooting
         if (fireInput && !_isFiring)
@@ -202,6 +131,36 @@ public class PlayerController : MonoBehaviour
         _rb.gravityScale = 5f;
     }
 
+    public void JumpForceChange()
+    {
+        if (jumpforceCoroutine != null)
+        {
+            StopCoroutine(jumpforceCoroutine);
+            jumpforceCoroutine = null;
+            jumpForce = initalJumpForce;
+        }
+
+        jumpforceCoroutine = StartCoroutine(JumpForceChangeCoroutine());
+    }
+
+    IEnumerator JumpForceChangeCoroutine()
+    {
+        currentPowerupDuration = initialPowerupDuration + currentPowerupDuration;
+        jumpForce = powerupJumpForce;
+
+        while (currentPowerupDuration > 0)
+        {
+            currentPowerupDuration -= Time.deltaTime;
+            if (currentPowerupDuration < 0) currentPowerupDuration = 0;
+            if (debugMode) Debug.Log("Jump Powerup Time Remaining: " + currentPowerupDuration);
+            yield return null;
+        }
+
+        jumpForce = initalJumpForce;
+        jumpforceCoroutine = null;
+        currentPowerupDuration = 0;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Squish") && _rb.linearVelocityY < 0)
@@ -209,6 +168,8 @@ public class PlayerController : MonoBehaviour
             collision.GetComponentInParent<BaseEnemy>().TakeDamage(0, DamageType.JumpedOn);
             _rb.linearVelocityY = 0;
             _rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+            _audioSource.PlayOneShot(stompSound);
         }
     }
 }

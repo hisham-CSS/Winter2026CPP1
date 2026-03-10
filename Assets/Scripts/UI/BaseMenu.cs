@@ -39,5 +39,6 @@ public enum MenuStates
 {
     MainMenu,
     SettingsMenu,
-    CreditsMenu
+    CreditsMenu,
+    PauseMenu
 }

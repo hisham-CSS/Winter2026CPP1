@@ -91,4 +91,27 @@ public class MenuController : MonoBehaviour
             menuStack.Push(newState);
         }    
     }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            menuDictionary.TryGetValue(MenuStates.PauseMenu, out BaseMenu pauseMenu);
+
+            if (pauseMenu != null)
+            {
+                if (currentMenu == null)
+                {
+                    JumpTo(MenuStates.PauseMenu);
+                }
+                else
+                {
+                    menuStack.Pop();
+                    _currentMenu.Exit();
+                    _currentMenu.gameObject.SetActive(false);
+                    _currentMenu = null;
+                }
+            }
+        }    
+    }
 }

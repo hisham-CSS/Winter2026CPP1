@@ -8,6 +8,9 @@ public class Shoot : MonoBehaviour
     [SerializeField] private Transform spawnPointLeft;
     [SerializeField] private Transform spawnPointRight;
     [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private AudioClip shootSound;
+
+    private AudioSource _audioSource;
 
     public Action OnProjectileFired;
 
@@ -17,6 +20,7 @@ public class Shoot : MonoBehaviour
     void Start()
     {
         _sr = GetComponent<SpriteRenderer>();
+        _audioSource = GetComponent<AudioSource>();
 
         if (initalShotVelocity == Vector2.zero)
         {
@@ -47,5 +51,7 @@ public class Shoot : MonoBehaviour
         }
         
         OnProjectileFired?.Invoke();
+
+        _audioSource.PlayOneShot(shootSound);
     }
 }

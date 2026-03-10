@@ -133,7 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a7f16aae07ff5f4e867d1b8761b8765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
+  type: 0
   lifetime: 10
+  damage: 1
 --- !u!58 &-4540757514668148545
 CircleCollider2D:
   m_ObjectHideFlags: 0
